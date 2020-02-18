@@ -4,13 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class TeamCreator {
-
-
 
     public static void addAttendees(Scanner scanner, String fileLocation) throws IOException {
 
@@ -55,36 +51,49 @@ public class TeamCreator {
 
 
 
-    public static void createTeams(ArrayList<String> attendeesList, Scanner scanner){
-        ArrayList<ArrayList> teamContainer = new ArrayList<>();
-        Random rand = new Random();
+    public static void createTeams(ArrayList<String> attendeesList, Scanner scanner, List<List<String>> teamContainer){
 
-        int numberOfTeams = 0;
-        int size = attendeesList.size();
+        int i=0;
+        int numberOfTeams;
 
-        System.out.println("How many teams would you like to create? ("+size+" MAX)");
+        System.out.println("How many teams would you like to create? ("+attendeesList.size()+" MAX)");
         numberOfTeams = scanner.nextInt();
 
-        if (numberOfTeams>size){
+        if (numberOfTeams>attendeesList.size()){
             System.out.println("Not enough attendees to create" + numberOfTeams + "Teams");
         }
         else {
+            Collections.shuffle(attendeesList);
             while (numberOfTeams > 0) {
-                ArrayList<String> team = new ArrayList<>();
-                teamContainer.add(team);
+                teamContainer.add(new ArrayList<>());
                 numberOfTeams--;
             }
-            for (int i = 0; i < size; i++) {
-
-
-                String temp = attendeesList.get(i);
-                //TODO: Figure out how to add randomly to the arraylists
+            while(i<attendeesList.size()) {
+                for (int x=0; x<teamContainer.size(); x++){
+                    if (i<attendeesList.size()) {
+                        String temp = attendeesList.get(i);
+                        teamContainer.get(x).add(temp);
+                        i++;
+                    }
+                }
 
             }
         }
-
-
-
-
+        System.out.println(tString(teamContainer));
     }
+
+
+    public static String tString(List<List<String>> teamContainer) {
+
+        String team = "";
+        for (int i = 0; i < teamContainer.size(); i++) {
+            String members = "";
+             for (int j = 0; j < teamContainer.get(i).size(); j++) {
+                members += teamContainer.get(i).get(j)+" ";
+            }
+            team += "Team "+(i+1)+": "+members+"\n";
+        }
+        return  team;
+    }
+
 }
